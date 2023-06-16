@@ -1,0 +1,6 @@
+# IGNORE OBJECT FILE
+**/obj/
+**/*.o
+
+# MISC
+**/.vscode/
