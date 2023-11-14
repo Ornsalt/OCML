@@ -2,52 +2,56 @@
 ## PROJECT      : C LIBRARIES - OCML   ##
 ## DATE         : 2023                 ##
 ## ENVIRONEMENT : Unix                 ##
-## DEPENDENCIES : OCML OCL CSFML       ##
+## DEPENDENCIES : OCL CSFML            ##
 ## AUTHOR       : ORNSOLOT             ##
 #########################################
 
-# Project Tree
-BINDIR	= .
-BINEXT	= .exe
-OBJDIR	= obj
-OBJEXT	= .o
-SRCDIR	= src
-SRCEXT	= .c
-INCDIR	= $(SRCDIR)/inc/
-LIBDIR	= $(SRCDIR)/lib/
+# Binary file
+BDR		= ..
+BXT 	= .a
+BIN		= lib$(shell basename $(shell pwd))
 
-# compilation
-BIN	= projectname$(BINEXT)
+# Source file
+SDR		= ./src
+SXT		= .c
+SRC 	= $(shell find $(SDR) -name '*$(SXT)')
 
-CC	= gcc
-CCFLAGS	= -g3 -Wall -Wextra -Werror -I./$(INCDIR)
+ODR		= ./obj
+OXT		= .o
+OBJ 	= $(subst $(SXT),$(OXT), $(subst $(SDR),$(ODR),$(SRC)))
 
-LK	= gcc
-LDLAGS	= -L./$(LIBDIR) $(LIB)
+IDR 	= $(SDR)/inc
 
-# Variable
-DEP	:= csfml-graphics csfml-system csfml-window csfml-audio
-SRC	:= $(wildcard $(SRCDIR)/*.c)
-INC	:= $(wildcard $(INCDIR)/*.h)
-OBJ	:= $(SRC:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
-LIB	:= $(addprefix -l, $(DEP))
+# Compiler
+CC		= gcc
+CCFLAGS	= -g3 -Wall -Wextra -Werror -I $(IDR)
+
+LK		= ar rcs
+LKFLAGS	=
+
+#######################
+## MAKEFILE VARIABLE ##
+#######################
+MAKEFLAGS	+= --no-print-directory
 
 # Rules
-.PHONY: fclean clean
-
 $(BIN): $(OBJ)
-	$(CC) -o $@ $< $(CFLAGS) $(LDLAGS)
-	@echo "Linking complete!"
+	@$(LK) $(LKFLAGS) $(BDR)/$@$(BXT) $(OBJ)
+	@echo " └─ [✓] $(BDR)/$@$(BXT)"
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.c
-	@$(CC) -c $(CFLAGS) -o $@ $<
-	@echo "[✓] $<"
+$(ODR)/%.o: $(SDR)/%.c
+	@mkdir -p $(@D)
+	@$(CC) $(CCFLAGS) -o $@ -c $<
+	@echo " ├─ [✓] $<"
+
+all: $(BIN)
 
 clean:
-	rm -f $(OBJ)
-	@echo "Cleanup complete!"
+	@rm -Rf $(ODR)
 
+purge: clean
+	@rm -f $(BDR)/$(BIN)$(BXT)
 
-fclean: clean
-	rm -f $(BINDIR)/$(BIN)
-	@echo "Executable removed!"
+re:	purge all
+
+.PHONY: re all clean purge
