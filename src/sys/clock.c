@@ -1,13 +1,13 @@
 #include "ocml.h"
 
-Clock_t *setClock(short reset)
+Clock_t *setClock(double reset)
 {
     Clock_t *clock = malloc(sizeof(Clock_t));
 
     if (clock) {
         clock->core = sfClock_create();
         clock->reset = reset;
-        clock->delta = 0;
+        clock->delta = 0.0;
     }
     return (clock);
 }
@@ -18,7 +18,7 @@ void unsetClock(Clock_t *clock)
     free(clock);
 }
 
-void resetClock(Clock_t *clock, float reset)
+void resetClock(Clock_t *clock, double reset)
 {
     clock->reset = reset;
     clock->delta = 0;

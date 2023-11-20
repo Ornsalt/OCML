@@ -20,11 +20,11 @@ ODR		= ./obj
 OXT		= .o
 OBJ 	= $(subst $(SXT),$(OXT), $(subst $(SDR),$(ODR),$(SRC)))
 
-IDR 	= $(SDR)/inc
+IDR 	= -I $(SDR)/inc -I ../ocl/src/inc
 
 # Compiler
 CC		= gcc
-CCFLAGS	= -g3 -Wall -Wextra -Werror -I $(IDR)
+CCFLAGS	= -g3 -Wall -Wextra -Werror $(IDR)
 
 LK		= ar rcs
 LKFLAGS	=

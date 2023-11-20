@@ -7,9 +7,9 @@ Window_t *setWindow(WdIni_t *conf)
     v2u_t iconSize = (icon) ? sfImage_getSize(icon) : (v2u_t){0, 0};
 
     if (wd) {
-        wd->core = sfRenderWindow_create(conf->mode, conf->title, sfResize | sfClose, NULL);
-        sfRenderWindow_setVerticalSyncEnabled(wd->core, conf->vsync);
+        wd->core = sfRenderWindow_create(conf->mode, conf->title, conf->style, NULL);
         sfRenderWindow_setFramerateLimit(wd->core, conf->fps);
+        sfRenderWindow_setVerticalSyncEnabled(wd->core, conf->vsync);
         sfRenderWindow_setKeyRepeatEnabled(wd->core, conf->key);
         sfRenderWindow_setMouseCursorGrabbed(wd->core, conf->grab);
         sfRenderWindow_setMouseCursorVisible(wd->core, conf->visible);
@@ -19,7 +19,7 @@ Window_t *setWindow(WdIni_t *conf)
             sfRenderWindow_setIcon(wd->core, iconSize.x, iconSize.y, sfImage_getPixelsPtr(icon));
             sfImage_destroy(icon);
         }
-        wd->clock = setClock(1 / conf->fps);
+        wd->clock = setClock((double) 1 / conf->fps);
     }
     return (wd);
 }

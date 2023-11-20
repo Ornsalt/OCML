@@ -2,15 +2,27 @@
 
 #include "ocml.h"
 
+typedef struct OsClock_s {
+    sfClock *core;
+    double reset;
+    double delta;
+} Clock_t;
+
+Clock_t *setClock(double reset);
+void unsetClock(Clock_t *clock);
+void resetClock(Clock_t *clock, double reset);
+size_t updateClock(Clock_t *clock);
+
 typedef struct OsWindowIni {
-    char *title;
     sfVideoMode mode;
+    char *title;
+    sfUint32 style;
+    short fps;
     sfBool vsync;
     sfBool key;
     sfBool grab;
     sfBool visible;
     sfBool hide;
-    short fps;
     char *icon;
 } WdIni_t;
 
