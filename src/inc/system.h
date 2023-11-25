@@ -29,8 +29,9 @@ typedef struct OsWindowIni {
 typedef struct OsWindow_s {
     sfRenderWindow *core;
     Clock_t *clock;
+    sfEvent event;
 } Window_t;
 
 Window_t *setWindow(WdIni_t *conf);
-void screenshot(Window_t *wd, char *file);
+void screenshot(Window_t *wd, char *path);
 void unsetWindow(Window_t *wd);

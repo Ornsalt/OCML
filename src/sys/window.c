@@ -1,5 +1,10 @@
 #include "ocml.h"
 
+/**
+ * \brief   Create a instance of the Window_t Object.
+ * \param   conf the parameters to setup the Window_t Object.
+ * \return  Window_t Object.
+ */
 Window_t *setWindow(WdIni_t *conf)
 {
     Window_t *wd = (conf) ? malloc(sizeof(Window_t)) : NULL;
@@ -24,24 +29,35 @@ Window_t *setWindow(WdIni_t *conf)
     return (wd);
 }
 
-void screenshot(Window_t *wd, char *file)
+/**
+ * \brief   Take a screenshote of the current window.
+ * \param   wd the window to take a screenshot from.
+ * \param   path the path to the file it will be saved has (name and extension included).
+ */
+void screenshot(Window_t *wd, char *path)
 {
     v2u_t wdSize = (wd) ? sfRenderWindow_getSize(wd->core) : (v2u_t){0, 0};
     sfTexture *texture = (wd) ? sfTexture_create(wdSize.x, wdSize.y) : NULL;
     sfImage* screenshot = NULL;
     
-    if (texture) {
+    if (texture && path) {
         sfTexture_updateFromRenderWindow(texture, wd->core, wdSize.x, wdSize.y);
         screenshot = sfTexture_copyToImage(texture);
-        sfImage_saveToFile(screenshot, file);
-        sfTexture_destroy(texture);
+        sfImage_saveToFile(screenshot, path);
         sfImage_destroy(screenshot);
+        sfTexture_destroy(texture);
     }
 }
 
+/**
+ * \brief   Clear the memory taken by the Window_t Object.
+ * \param   wd the element to free.
+ */
 void unsetWindow(Window_t *wd)
 {
-    sfRenderWindow_destroy(wd->core);
-    unsetClock(wd->clock);
-    free(wd);
+    if (wd) {
+        sfRenderWindow_destroy(wd->core);
+        unsetClock(wd->clock);
+        free(wd);
+    }
 }

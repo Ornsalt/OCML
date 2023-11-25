@@ -1,5 +1,12 @@
 #include "ocml.h"
 
+/**
+ * \brief   Arrange the N elements of ARRAY in random order.
+ * \warning Only effective if N is much smaller than RAND_MAX (32767) !
+ * \param   path the path to the file of the font.
+ * \param   size the size in pixel of the font.
+ * \param   style the style (bold,...) of the font.
+ */
 Font_t *setFont(char *path, size_t size, sfUint32 style)
 {
     Font_t *font = malloc(sizeof(Font_t));
@@ -12,6 +19,10 @@ Font_t *setFont(char *path, size_t size, sfUint32 style)
     return (font);
 }
 
+/**
+ * \brief   Clear the memory taken by the Text_t Object.
+ * \param   font the element to free.
+ */
 void unsetFont(Font_t *font)
 {
     if (font) {
@@ -20,6 +31,12 @@ void unsetFont(Font_t *font)
     }
 }
 
+/**
+ * \brief   Create an instance of the Text_t Object.
+ * \param   font the font (Font_t Object) of the new Text_t Object.
+ * \param   string the text of the new Text_t Object.
+ * \param   color the color of the new Text_t Object.
+ */
 Text_t *setText(Font_t *font, char *string, sfColor color)
 {
     Text_t *text = malloc(sizeof(Text_t));
@@ -36,6 +53,10 @@ Text_t *setText(Font_t *font, char *string, sfColor color)
     return (text);
 }
 
+/**
+ * \brief   Clear the memory taken by the Text_t Object.
+ * \param   text the element to free.
+ */
 void unsetText(Text_t *text)
 {
     if (text) {

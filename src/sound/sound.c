@@ -1,5 +1,9 @@
 #include "ocml.h"
 
+/**
+ * \brief   Create an instance of the SndBuffer_t Object.
+ * \param   path the path to the file containing the sound.
+ */
 SndBuffer_t *setSoundBuffer(char *path)
 {
     SndBuffer_t *buffer = (path) ? malloc(sizeof(SndBuffer_t)) : NULL;
@@ -10,6 +14,10 @@ SndBuffer_t *setSoundBuffer(char *path)
     return (buffer);
 }
 
+/**
+ * \brief   Clear the memory taken by the SndBuffer_t Object.
+ * \param   buffer the element to free.
+ */
 void unsetSoundBuffer(SndBuffer_t *buffer)
 {
     if (buffer) {
@@ -18,6 +26,11 @@ void unsetSoundBuffer(SndBuffer_t *buffer)
     }
 }
 
+/**
+ * \brief   Create an instance of the Sound_t Object.
+ * \param   buffer the stream containing the sound.
+ * \param   loop a boolean representing if the sound must be play in a loop.
+ */
 Sound_t *setSound(SndBuffer_t *buffer, sfBool loop)
 {
     Sound_t *sound = (buffer) ? malloc(sizeof(Sound_t)) : NULL;
@@ -29,6 +42,10 @@ Sound_t *setSound(SndBuffer_t *buffer, sfBool loop)
     return (sound);
 }
 
+/**
+ * \brief   Clear the memory taken by the Sound_t Object.
+ * \param   sound the element to free.
+ */
 void unsetSound(Sound_t *sound)
 {
     if (sound) {
@@ -37,6 +54,11 @@ void unsetSound(Sound_t *sound)
     }
 }
 
+/**
+ * \brief   Create an instance of the Music_t Object.
+ * \param   path the path to the file containing the music.
+ * \param   loop a boolean representing if the music must be play in a loop.
+ */
 Music_t *setMusic(char *path, sfBool loop)
 {
     Music_t *music = (path) ? malloc(sizeof(Music_t)) : NULL;
@@ -49,6 +71,10 @@ Music_t *setMusic(char *path, sfBool loop)
     return (music);
 }
 
+/**
+ * \brief   Clear the memory taken by the Music_t Object.
+ * \param   music the element to free.
+ */
 void unsetMusic(Music_t *music)
 {
     if (music) {
