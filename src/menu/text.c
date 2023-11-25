@@ -1,8 +1,7 @@
 #include "ocml.h"
 
 /**
- * \brief   Arrange the N elements of ARRAY in random order.
- * \warning Only effective if N is much smaller than RAND_MAX (32767) !
+ * \brief   Create an instance of the Font_t Object.
  * \param   path the path to the file of the font.
  * \param   size the size in pixel of the font.
  * \param   style the style (bold,...) of the font.
