@@ -11,4 +11,5 @@ typedef sfVector2f v2f_t;
 
 #include "system.h"
 #include "sound.h"
+#include "color.h"
 #include "menu.h"
