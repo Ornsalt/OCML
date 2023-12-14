@@ -20,7 +20,7 @@ void unsetSound(Sound_t *sound);
 
 typedef struct osMusic_s {
     sfMusic  *core;
-    //String_t *name;
+    String_t *name;
 } Music_t;
 
 Music_t *setMusic(char *path, sfBool loop);

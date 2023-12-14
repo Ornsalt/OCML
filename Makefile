@@ -6,52 +6,106 @@
 ## AUTHOR       : ORNSOLOT             ##
 #########################################
 
-# Binary file
-BDR		= ..
-BXT 	= .a
-BIN		= lib$(shell basename $(shell pwd))
+##################
+## Project Tree ##
+##################
 
-# Source file
-SDR		= ./src
-SXT		= .c
-SRC 	= $(shell find $(SDR) -name '*$(SXT)')
+## Binary file(s)
+#################
+BDR	= ..
+BXT = .a
+BIN	= lib$(shell basename $(shell pwd))
 
-ODR		= ./obj
-OXT		= .o
-OBJ 	= $(subst $(SXT),$(OXT), $(subst $(SDR),$(ODR),$(SRC)))
+## Source file(s)
+#################
+SDR	= src
+SXT	= .c
+SRC = $(shell find $(SDR) -name '*$(SXT)' ! -path '*/lib/*')
 
-IDR 	= -I $(SDR)/inc -I ../ocl/src/inc
+ODR	= obj
+OXT	= .o
+OBJ = $(subst $(SXT),$(OXT), $(subst $(SDR),$(ODR),$(SRC)))
 
-# Compiler
+## Dependencies file(s)
+#######################
+LDR	= $(SDR)/lib
+IDR = -I $(SDR)/inc -I $(LDR)/*/$(SDR)/inc
+ELB = $(shell find $(LDR) -mindepth 1 -maxdepth 1 -not -empty -type d -printf '%f\n' | sort -k 2)
+CLN = $(addprefix clean_, $(ELB))
+LXT	= .a
+LIB	= $(shell find $(LDR) -mindepth 1 -maxdepth 1 -name '*$(LXT)')
+
+## Compiler
 CC		= gcc
 CCFLAGS	= -g3 -Wall -Wextra -Werror $(IDR)
 
-LK		= ar rcs
-LKFLAGS	=
+## Linker
+LK		= ar
+LKFLAGS	= rcso
 
 #######################
 ## MAKEFILE VARIABLE ##
 #######################
-MAKEFLAGS	+= --no-print-directory
+MAKEFLAGS	= --no-print-directory
+HEAD		= $(LIFELINE)" ├──"
+LEFT		= $(LIFELINE)" │ "
+NODE		= $(LIFELINE)" ├── [✓]"
+TAIL		= $(LIFELINE)" └── [✓]"
 
-# Rules
-$(BIN): $(OBJ)
-	@$(LK) $(LKFLAGS) $(BDR)/$@$(BXT) $(OBJ)
-	@echo " └─ [✓] $(BDR)/$@$(BXT)"
+####################
+## Makefile Rules ##
+####################
+.PHONY: re all clean $(BIN)
+
+## General rules
+################
+re:	clean all
+
+all: $(BIN)
+
+clean: $(CLN)
+	@rm -Rf $(ODR)
+	@rm -f $(BDR)/$(BIN)$(BXT)
+	
+vanity:
+	@echo "$(LEFT)"
+	@echo "$(LEFT)\t ██████╗  ██████╗███╗   ███╗██╗"
+	@echo "$(LEFT)\t██╔═══██╗██╔════╝████╗ ████║██║"
+	@echo "$(LEFT)\t██║   ██║██║     ██╔████╔██║██║"
+	@echo "$(LEFT)\t██║   ██║██║     ██║╚██╔╝██║██║"
+	@echo "$(LEFT)\t╚██████╔╝╚██████╗██║ ╚═╝ ██║███████╗"
+	@echo "$(LEFT)\t ╚═════╝  ╚═════╝╚═╝     ╚═╝╚══════╝"
+	@echo "$(LEFT)"                                      
+
+vanity1:
+	@echo "$(LEFT)"
+	@echo "$(LEFT)\t ▒█████   ▄████▄   ███▄ ▄███▓ ██▓"
+	@echo "$(LEFT)\t▒██▒  ██▒▒██▀ ▀█  ▓██▒▀█▀ ██▒▓██▒"
+	@echo "$(LEFT)\t▒██░  ██▒▒▓█    ▄ ▓██    ▓██░▒██░"
+	@echo "$(LEFT)\t▒██   ██░▒▓▓▄ ▄██▒▒██    ▒██ ▒██░"
+	@echo "$(LEFT)\t░ ████▓▒░▒ ▓███▀ ░▒██▒   ░██▒░██████▒"
+	@echo "$(LEFT)\t░ ▒░▒░▒░ ░ ░▒ ▒  ░░ ▒░   ░  ░░ ▒░▓  ░"
+	@echo "$(LEFT)\t  ░ ▒ ▒░   ░  ▒   ░  ░      ░░ ░ ▒  ░"
+	@echo "$(LEFT)\t░ ░ ░ ▒  ░        ░      ░     ░ ░"
+	@echo "$(LEFT)\t░ ░  ░ ░             ░       ░  ░"
+	@echo "$(LEFT)\t         ░"
+	@echo "$(LEFT)"
+
+## procedural Rules
+###################
+$(ELB):
+	@echo "$(HEAD) $@"
+	@make -C $(LDR)/$@ lib$@ LIFELINE='$(LEFT) '
+	@echo "$(LEFT)"
 
 $(ODR)/%.o: $(SDR)/%.c
 	@mkdir -p $(@D)
 	@$(CC) $(CCFLAGS) -o $@ -c $<
-	@echo " ├─ [✓] $<"
+	@echo "$(NODE) $<"
 
-all: $(BIN)
+$(BIN): vanity $(ELB) $(OBJ)
+	@$(LK) $(LKFLAGS) $(BDR)/$@$(BXT) $(OBJ) $(LIB)
+	@echo "$(TAIL) $(BDR)/$@$(BXT)"
 
-clean:
-	@rm -Rf $(ODR)
-
-purge: clean
-	@rm -f $(BDR)/$(BIN)$(BXT)
-
-re:	purge all
-
-.PHONY: re all clean purge
+$(CLN):
+	@make -C $(LDR)/$(subst clean_,,$@) clean

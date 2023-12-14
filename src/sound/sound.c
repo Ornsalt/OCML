@@ -66,7 +66,7 @@ Music_t *setMusic(char *path, sfBool loop)
     if (music) {
         music->core = sfMusic_createFromFile(path);
         sfMusic_setLoop(music->core, loop);
-        //music->name = setStr(path);
+        music->name = setStr(path);
     }
     return (music);
 }
@@ -79,7 +79,7 @@ void unsetMusic(Music_t *music)
 {
     if (music) {
         sfMusic_destroy(music->core);
-        //unsetStr(music->name);
+        unsetStr(music->name);
         free(music);
     }
 }
